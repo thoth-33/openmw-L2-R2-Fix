@@ -347,13 +347,13 @@ namespace MWInput
             // Left and right triggers toggle through open GUI windows.
             if (arg.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
             {
-                if (arg.value == 32767) // Treat like a button.
+                if (arg.value >= 32000) // Threshold is more consistent.
                     winMgr->cycleActiveControllerWindow(true);
                 return true;
             }
             else if (arg.axis == SDL_CONTROLLER_AXIS_TRIGGERLEFT)
             {
-                if (arg.value == 32767) // Treat like a button.
+                if (arg.value >= 32000) // Threshold is more consistent.
                     winMgr->cycleActiveControllerWindow(false);
                 return true;
             }
@@ -402,11 +402,11 @@ namespace MWInput
         switch (arg.axis)
         {
             case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-                if (arg.value == 32767) // Treat like a button.
+                if (arg.value >= 32000) // Threshold is more consistent.
                     winMgr->injectKeyPress(MyGUI::KeyCode::Minus, 0, false);
                 break;
             case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-                if (arg.value == 32767) // Treat like a button.
+                if (arg.value >= 32000) // Threshold is more consistent.
                     winMgr->injectKeyPress(MyGUI::KeyCode::Equals, 0, false);
                 break;
             case SDL_CONTROLLER_AXIS_LEFTX:

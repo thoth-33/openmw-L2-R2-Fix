@@ -834,7 +834,8 @@ bool MWState::StateManager::confirmLoading(const std::vector<std::string_view>& 
     while (true)
     {
         auto windowManager = MWBase::Environment::get().getWindowManager();
-        windowManager->interactiveMessageBox(message, buttons, true, selectedButton);
+        const int cancelIndex = static_cast<int>(buttons.size()) - 1;
+        windowManager->interactiveMessageBox(message, buttons, true, selectedButton, cancelIndex);
         selectedButton = windowManager->readPressedButton();
         if (selectedButton == 0)
             break;

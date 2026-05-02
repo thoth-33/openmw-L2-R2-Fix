@@ -464,6 +464,16 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="7" column="0">
+                  <widget class="QCheckBox" name="classicWaterShaderCheckBox">
+                   <property name="toolTip">
+                    <string>Use classic water shader files and textures when available.</string>
+                   </property>
+                   <property name="text">
+                    <string>Enable Classic Water Shader</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="3" column="0">
                   <widget class="QCheckBox" name="autoUseObjectSpecularMapsCheckBox">
                    <property name="toolTip">
@@ -1253,203 +1263,561 @@
       </attribute>
       <layout class="QVBoxLayout">
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="1">
-          <widget class="QComboBox" name="showOwnedComboBox">
-           <property name="currentIndex">
-            <number>1</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Off</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Tooltip</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Crosshair</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Tooltip and Crosshair</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="scalingSpinBox">
-           <property name="decimals">
-            <number>2</number>
-           </property>
-           <property name="minimum">
-            <double>0.500000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>8.000000000000000</double>
-           </property>
-           <property name="singleStep">
-            <double>0.250000000000000</double>
-           </property>
-           <property name="value">
-            <double>1.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QSpinBox" name="fontSizeSpinBox">
-           <property name="minimum">
-            <number>12</number>
-           </property>
-           <property name="maximum">
-            <number>18</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="value">
-            <number>16</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="scalingLabel">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This setting scales GUI windows. A value of 1.0 results in the normal scale.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>GUI Scaling Factor</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="showEffectDurationCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show the remaining duration of magic effects and lights if this setting is true. The remaining duration is displayed in the tooltip by hovering over the magical effect. &lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Show Effect Duration</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QCheckBox" name="changeDialogTopicsCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, dialogue topics will have a different color if the topic is specific to the NPC you're talking to or the topic was previously seen. Color can be changed in settings.cfg.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Change Dialogue Topic Color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="fontSizeLabel">
-           <property name="toolTip">
-            <string>Size of characters in game texts.</string>
-           </property>
-           <property name="text">
-            <string>Font Size</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QCheckBox" name="useZoomOnMapCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable zooming on local and global maps.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Can Zoom on Maps</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QCheckBox" name="showProjectileDamageCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, damage bonus of arrows and bolts will be shown on item tooltip.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Show Projectile Damage</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QCheckBox" name="showMeleeInfoCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, melee weapons reach and speed will be shown on item tooltip.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Show Melee Info</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QCheckBox" name="stretchBackgroundCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stretch menus, load screens, etc. to the window aspect ratio.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Stretch Menu Background</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QCheckBox" name="controllerMenusCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Make it easier to use game menus with a controller.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Enable Controller Menus</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QCheckBox" name="controllerMenuTooltipsCheckBox">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, make tooltips visible by default.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Show Controller Tooltips By Default</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="showOwnedLabel">
-           <property name="text">
-            <string>Show Owned Objects</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QCheckBox" name="showEnchantChanceCheckBox">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Whether or not the chance of success will be displayed in the enchanting menu.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Show Enchant Chance</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+        <widget class="QTabWidget" name="interfaceTabWidget">
+         <property name="currentIndex">
+          <number>0</number>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+         <widget class="QWidget" name="interfaceGeneralTab">
+          <attribute name="title">
+           <string>General</string>
+          </attribute>
+          <layout class="QVBoxLayout">
+           <item>
+            <layout class="QGridLayout" name="interfaceGeneralGridLayout">
+             <item row="6" column="1">
+              <widget class="QComboBox" name="showOwnedComboBox">
+               <property name="currentIndex">
+                <number>1</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Off</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Tooltip</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Crosshair</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Tooltip and Crosshair</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="scalingSpinBox">
+               <property name="decimals">
+                <number>2</number>
+               </property>
+               <property name="minimum">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="maximum">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.250000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            <item row="5" column="1">
+             <widget class="QSpinBox" name="fontSizeSpinBox">
+              <property name="minimum">
+               <number>12</number>
+              </property>
+               <property name="maximum">
+                <number>18</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+               <number>16</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="dialogueScalingSpinBox">
+              <property name="decimals">
+               <number>2</number>
+              </property>
+              <property name="minimum">
+               <double>0.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>8.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.250000000000000</double>
+              </property>
+              <property name="value">
+               <double>0.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="scalingLabel">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This setting scales GUI windows. A value of 1.0 results in the normal scale.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+               <property name="text">
+                <string>GUI Scaling Factor</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QCheckBox" name="showEffectDurationCheckBox">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show the remaining duration of magic effects and lights if this setting is true. The remaining duration is displayed in the tooltip by hovering over the magical effect. &lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Show Effect Duration</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QCheckBox" name="changeDialogTopicsCheckBox">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, dialogue topics will have a different color if the topic is specific to the NPC you're talking to or the topic was previously seen. Color can be changed in settings.cfg.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Change Dialogue Topic Color</string>
+               </property>
+              </widget>
+             </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="fontSizeLabel">
+              <property name="toolTip">
+               <string>Size of characters in game texts.</string>
+              </property>
+              <property name="text">
+               <string>Font Size</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="dialogueScalingLabel">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scales the dialogue window independently of the main GUI scaling.&lt;/p&gt;&lt;p&gt;Set to 0.0 to follow GUI Scaling Factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Dialogue Interface Scaling</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+            <widget class="QLabel" name="settingsInterfaceScalingLabel">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scales the settings menu, main menu, and save/load interface independently of the main GUI scaling.&lt;/p&gt;&lt;p&gt;Set to 0.0 to follow GUI Scaling Factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Settings &amp; Save/Load Interface Scaling</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="settingsInterfaceScalingSpinBox">
+              <property name="decimals">
+               <number>2</number>
+              </property>
+              <property name="minimum">
+               <double>0.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>8.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.250000000000000</double>
+              </property>
+              <property name="value">
+               <double>0.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="recommendedScalingDefaultsCheckBox">
+              <property name="toolTip">
+               <string>Apply recommended interface and dialogue scaling based on resolution.</string>
+              </property>
+              <property name="text">
+               <string>Use Recommended Scaling Defaults</string>
+              </property>
+             </widget>
+            </item>
+              <item row="10" column="0">
+               <widget class="QCheckBox" name="useZoomOnMapCheckBox">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable zooming on local and global maps.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Can Zoom on Maps</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QCheckBox" name="showProjectileDamageCheckBox">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, damage bonus of arrows and bolts will be shown on item tooltip.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Show Projectile Damage</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QCheckBox" name="showMeleeInfoCheckBox">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this setting is true, melee weapons reach and speed will be shown on item tooltip.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Show Melee Info</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="1">
+             <widget class="QCheckBox" name="stretchBackgroundCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stretch menus, load screens, etc. to the window aspect ratio.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Stretch Menu Background</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QCheckBox" name="unskippableIntroVideosCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Prevent skipping intro videos before the main menu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Enable Unskippable Intro Videos</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <widget class="QCheckBox" name="luaAdjustmentsCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hides LUA-based HUD elements when GUIs are open.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Enable LUA Adjustments</string>
+              </property>
+             </widget>
+            </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="showOwnedLabel">
+               <property name="text">
+                <string>Show Owned Objects</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QCheckBox" name="showEnchantChanceCheckBox">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Whether or not the chance of success will be displayed in the enchanting menu.&lt;/p&gt;&lt;p&gt;The default value is false.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Show Enchant Chance</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="interfaceGeneralSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+          </widget>
+          <widget class="QWidget" name="interfaceXboxTab">
+           <attribute name="title">
+            <string>XBOX</string>
+           </attribute>
+           <layout class="QVBoxLayout">
+            <item>
+             <layout class="QGridLayout" name="interfaceXboxGridLayout">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="xboxStyledDialogCheckBox">
+                <property name="text">
+                 <string>XBOX Styled Dialog</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="xboxAlchemyUiCheckBox">
+                <property name="toolTip">
+                 <string>Replace alchemy with an Xbox-style split menu flow.</string>
+                </property>
+                <property name="text">
+                 <string>XBOX Alchemy UI</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QCheckBox" name="xboxStyledMinimapCheckBox">
+                <property name="toolTip">
+                 <string>Move HUD minimap and active effects to the top-left in an Xbox-style layout.</string>
+                </property>
+                <property name="text">
+                 <string>XBOX Styled Minimap</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="xboxStyledFontsCheckBox">
+                <property name="toolTip">
+                 <string>Use Montserrat fonts for Xbox-style UI. Disable to use MysticCards.</string>
+                </property>
+                <property name="text">
+                 <string>XBOX Styled Fonts</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="xboxTabOrderCheckBox">
+                <property name="toolTip">
+                 <string>Use original Xbox tab order: Inventory, Magic, Map, Stats.</string>
+                </property>
+                <property name="text">
+                 <string>XBOX Tab Order</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="interfaceXboxSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="interfaceControllerTab">
+          <attribute name="title">
+           <string>Controller</string>
+          </attribute>
+          <layout class="QVBoxLayout">
+           <item>
+            <layout class="QGridLayout" name="interfaceControllerGridLayout">
+             <item row="0" column="0">
+             <widget class="QCheckBox" name="controllerMenusCheckBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Make it easier to use game menus with a controller.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Enable Controller Menus</string>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+             <item row="1" column="0">
+             <widget class="QCheckBox" name="controllerMenuTooltipsCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, make tooltips visible by default.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              <property name="text">
+               <string>Show Controller Tooltips By Default</string>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+             <item row="2" column="0">
+             <widget class="QCheckBox" name="singularContainerTradeWindowCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, only the focused container or trade window is visible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              <property name="text">
+               <string>Enable Singular Window in the Container/Trade UI</string>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+             <item row="3" column="0">
+             <widget class="QCheckBox" name="controllerMenuHighlightCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Highlight the current controller selection in menus.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              <property name="text">
+               <string>Enable Highlighted Selections with Controller Interfaces</string>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="controllerMenuJoystickDpadCheckBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, use the left stick to navigate like the D-Pad instead of enabling the mouse.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              <property name="text">
+               <string>Use Left Stick for D-Pad Navigation</string>
+              </property>
+              <property name="visible">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="enableSoftwareMouseCheckBox">
+              <property name="toolTip">
+               <string>Use the software cursor (drawn by the UI) instead of the hardware cursor when using the controller.</string>
+              </property>
+              <property name="text">
+               <string>Enable Software Mouse</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <layout class="QHBoxLayout" name="gamepadCursorSpeedLayout">
+              <item>
+               <widget class="QLabel" name="gamepadCursorSpeedLabel">
+                <property name="toolTip">
+                 <string>Speed multiplier for the gamepad cursor.</string>
+                </property>
+                <property name="text">
+                 <string>Gamepad Cursor Speed</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="gamepadCursorSpeedSpinBox">
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="minimum">
+                 <double>0.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                 <property name="value">
+                  <double>0.300000000000000</double>
+                 </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="7" column="0">
+             <layout class="QHBoxLayout" name="controllerIconStyleLayout">
+              <item>
+               <widget class="QLabel" name="controllerIconStyleLabel">
+                <property name="toolTip">
+                 <string>Choose which controller button icons to show.</string>
+                </property>
+                <property name="text">
+                 <string>Controller Icon Style</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="controllerIconStyleComboBox">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Automatic</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Steam</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Xbox</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>PlayStation</string>
+                 </property>
+                </item>
+                 <item>
+                  <property name="text">
+                   <string>Nintendo Switch</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>GameCube</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            <item row="8" column="0">
+             <widget class="QCheckBox" name="controllerWhiteBlackButtonIconsCheckBox">
+              <property name="toolTip">
+               <string>Use white/black shoulder icons for LB/RB/L1/R1/L/R prompts.</string>
+              </property>
+              <property name="text">
+               <string>Enable white/black button icons</string>
+              </property>
+             </widget>
+            </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="interfaceControllerSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>

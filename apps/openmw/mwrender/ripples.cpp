@@ -11,6 +11,7 @@
 #include <components/sceneutil/color.hpp>
 #include <components/sceneutil/depth.hpp>
 #include <components/sceneutil/glextensions.hpp>
+#include <components/settings/values.hpp>
 #include <components/shader/shadermanager.hpp>
 
 #include "../mwworld/ptr.hpp"
@@ -104,14 +105,24 @@ namespace MWRender
     void RipplesSurface::setupFragmentPipeline()
     {
         auto& shaderManager = mResourceSystem->getSceneManager()->getShaderManager();
+        const bool useClassicWaterShader = Settings::shaders().mClassicWaterShader;
 
         Shader::ShaderManager::DefineMap defineMap = { { "rippleMapSize", std::to_string(sRTTSize) + ".0" } };
 
         osg::ref_ptr<osg::Shader> vertex = shaderManager.getShader("fullscreen_tri.vert", {}, osg::Shader::VERTEX);
+        const std::string blobberShaderName
+            = useClassicWaterShader ? "ripples_blobber_classic.frag" : "ripples_blobber.frag";
+        const std::string simulateShaderName
+            = useClassicWaterShader ? "ripples_simulate_classic.frag" : "ripples_simulate.frag";
         osg::ref_ptr<osg::Shader> blobber
-            = shaderManager.getShader("ripples_blobber.frag", defineMap, osg::Shader::FRAGMENT);
+            = shaderManager.getShader(blobberShaderName, defineMap, osg::Shader::FRAGMENT);
         osg::ref_ptr<osg::Shader> simulate
-            = shaderManager.getShader("ripples_simulate.frag", defineMap, osg::Shader::FRAGMENT);
+            = shaderManager.getShader(simulateShaderName, defineMap, osg::Shader::FRAGMENT);
+        if (useClassicWaterShader && (blobber == nullptr || simulate == nullptr))
+        {
+            blobber = shaderManager.getShader("ripples_blobber.frag", defineMap, osg::Shader::FRAGMENT);
+            simulate = shaderManager.getShader("ripples_simulate.frag", defineMap, osg::Shader::FRAGMENT);
+        }
         if (vertex == nullptr || blobber == nullptr || simulate == nullptr)
         {
             Log(Debug::Error) << "Failed to load shaders required for fragment shader ripple pipeline";
@@ -125,11 +136,19 @@ namespace MWRender
     void RipplesSurface::setupComputePipeline()
     {
         auto& shaderManager = mResourceSystem->getSceneManager()->getShaderManager();
+        const bool useClassicWaterShader = Settings::shaders().mClassicWaterShader;
 
-        osg::ref_ptr<osg::Shader> blobber
-            = shaderManager.getShader("core/ripples_blobber.comp", {}, osg::Shader::COMPUTE);
-        osg::ref_ptr<osg::Shader> simulate
-            = shaderManager.getShader("core/ripples_simulate.comp", {}, osg::Shader::COMPUTE);
+        const std::string blobberShaderName
+            = useClassicWaterShader ? "core/ripples_blobber_classic.comp" : "core/ripples_blobber.comp";
+        const std::string simulateShaderName
+            = useClassicWaterShader ? "core/ripples_simulate_classic.comp" : "core/ripples_simulate.comp";
+        osg::ref_ptr<osg::Shader> blobber = shaderManager.getShader(blobberShaderName, {}, osg::Shader::COMPUTE);
+        osg::ref_ptr<osg::Shader> simulate = shaderManager.getShader(simulateShaderName, {}, osg::Shader::COMPUTE);
+        if (useClassicWaterShader && (blobber == nullptr || simulate == nullptr))
+        {
+            blobber = shaderManager.getShader("core/ripples_blobber.comp", {}, osg::Shader::COMPUTE);
+            simulate = shaderManager.getShader("core/ripples_simulate.comp", {}, osg::Shader::COMPUTE);
+        }
         if (blobber == nullptr || simulate == nullptr)
         {
             Log(Debug::Error) << "Failed to load shaders required for compute shader ripple pipeline";

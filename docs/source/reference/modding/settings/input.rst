@@ -91,6 +91,15 @@ Input Settings
    Does not affect camera movement.
 
 .. omw-setting::
+   :title: enable software mouse
+   :type: boolean
+   :range: true, false
+   :default: true
+   :location: :bdg-success:`Launcher > Settings > Interface > Controller`
+
+   When using the controller in the UI, draws a software cursor instead of using the hardware cursor.
+
+.. omw-setting::
    :title: joystick dead zone
    :type: float32
    :range: 0.0 to 0.5

@@ -1,13 +1,18 @@
 #include "settingspage.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <string>
 
 #include <QCompleter>
 #include <QDesktopServices>
+#include <QDir>
+#include <QDoubleSpinBox>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QMenu>
+#include <QSignalBlocker>
 #include <QString>
 
 #include <components/config/gamesettings.hpp>
@@ -23,9 +28,19 @@ namespace
         checkbox.setCheckState(value ? Qt::Checked : Qt::Unchecked);
     }
 
+    void loadSettingFloat(const Settings::SettingValue<float>& value, QDoubleSpinBox& spinBox)
+    {
+        spinBox.setValue(value);
+    }
+
     void saveSettingBool(const QCheckBox& checkbox, Settings::SettingValue<bool>& value)
     {
         value.set(checkbox.checkState() == Qt::Checked);
+    }
+
+    void saveSettingFloat(const QDoubleSpinBox& spinBox, Settings::SettingValue<float>& value)
+    {
+        value.set(static_cast<float>(spinBox.value()));
     }
 
     void loadSettingInt(const Settings::SettingValue<int>& value, QComboBox& comboBox)
@@ -70,6 +85,89 @@ namespace
                 return 2;
         }
         return 0;
+    }
+
+    int toIndexControllerIconStyle(const std::string& value)
+    {
+        if (value == "steam")
+            return 1;
+        if (value == "xbox")
+            return 2;
+        if (value == "playstation")
+            return 3;
+        if (value == "switch")
+            return 4;
+        if (value == "gamecube")
+            return 5;
+        return 0;
+    }
+
+    std::string fromIndexControllerIconStyle(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                return "steam";
+            case 2:
+                return "xbox";
+            case 3:
+                return "playstation";
+            case 4:
+                return "switch";
+            case 5:
+                return "gamecube";
+            default:
+                return "auto";
+        }
+    }
+
+    struct RecommendedScalingDefaults
+    {
+        int width;
+        int height;
+        double interfaceScaling;
+        double dialogueScaling;
+        double settingsScaling;
+    };
+
+    constexpr std::array<RecommendedScalingDefaults, 21> recommendedScalingDefaults = {
+        RecommendedScalingDefaults{ 640, 480, 1.0, 1.0, 0.85 },
+        RecommendedScalingDefaults{ 720, 480, 1.0, 1.0, 0.85 },
+        RecommendedScalingDefaults{ 720, 576, 1.0, 1.2, 1.0 },
+        RecommendedScalingDefaults{ 800, 600, 1.2, 1.4, 1.0 },
+        RecommendedScalingDefaults{ 1024, 768, 1.25, 1.45, 1.05 },
+        RecommendedScalingDefaults{ 1152, 864, 1.45, 1.65, 1.25 },
+        RecommendedScalingDefaults{ 1280, 720, 1.45, 1.65, 1.25 },
+        RecommendedScalingDefaults{ 1280, 800, 1.65, 2.0, 1.4 },
+        RecommendedScalingDefaults{ 1280, 960, 1.65, 2.0, 1.4 },
+        RecommendedScalingDefaults{ 1280, 1024, 1.65, 2.0, 1.4 },
+        RecommendedScalingDefaults{ 1360, 768, 1.55, 1.85, 1.3 },
+        RecommendedScalingDefaults{ 1366, 768, 1.55, 1.85, 1.3 },
+        RecommendedScalingDefaults{ 1440, 1080, 1.85, 2.15, 1.55 },
+        RecommendedScalingDefaults{ 1600, 900, 1.75, 2.05, 1.5 },
+        RecommendedScalingDefaults{ 1600, 1200, 1.95, 2.35, 1.65 },
+        RecommendedScalingDefaults{ 1680, 1050, 1.85, 2.25, 1.55 },
+        RecommendedScalingDefaults{ 1920, 1080, 1.85, 2.25, 1.55 },
+        RecommendedScalingDefaults{ 1920, 1200, 1.95, 2.35, 1.65 },
+        RecommendedScalingDefaults{ 1920, 1440, 2.35, 2.75, 2.0 },
+        RecommendedScalingDefaults{ 2560, 1440, 2.35, 2.75, 2.0 },
+        RecommendedScalingDefaults{ 3840, 2160, 2.65, 3.15, 2.25 },
+    };
+
+    bool tryGetRecommendedScaling(
+        int width, int height, double& interfaceScaling, double& dialogueScaling, double& settingsScaling)
+    {
+        for (const auto& entry : recommendedScalingDefaults)
+        {
+            if (entry.width == width && entry.height == height)
+            {
+                interfaceScaling = entry.interfaceScaling;
+                dialogueScaling = entry.dialogueScaling;
+                settingsScaling = entry.settingsScaling;
+                return true;
+            }
+        }
+        return false;
     }
 
     enum FileTypeRoles
@@ -119,6 +217,14 @@ Launcher::SettingsPage::SettingsPage(
     }
 
     loadSettings();
+    connect(scalingSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this,
+        &SettingsPage::onInterfaceScalingChanged);
+    connect(dialogueScalingSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this,
+        &SettingsPage::onDialogueScalingChanged);
+    connect(settingsInterfaceScalingSpinBox,
+        static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this,
+        &SettingsPage::onSettingsInterfaceScalingChanged);
+    mLastInterfaceScaling = scalingSpinBox->value();
 
     mCellNameCompleter.setModel(&mCellNameCompleterModel);
     startDefaultCharacterAtField->setCompleter(&mCellNameCompleter);
@@ -183,6 +289,42 @@ void Launcher::SettingsPage::on_skipMenuCheckBox_stateChanged(int state)
 {
     startDefaultCharacterAtLabel->setEnabled(state == Qt::Checked);
     startDefaultCharacterAtField->setEnabled(state == Qt::Checked);
+}
+
+void Launcher::SettingsPage::on_recommendedScalingDefaultsCheckBox_stateChanged(int state)
+{
+    if (state == Qt::Checked)
+    {
+        int width = mLastResolutionWidth;
+        int height = mLastResolutionHeight;
+        if (width <= 0 || height <= 0)
+        {
+            width = Settings::video().mResolutionX;
+            height = Settings::video().mResolutionY;
+        }
+        if (applyRecommendedScalingDefaults(width, height))
+        {
+            mLastRecommendedResolutionWidth = width;
+            mLastRecommendedResolutionHeight = height;
+        }
+    }
+    else
+        setScalingValues(1.0, 1.0, 1.0);
+}
+
+void Launcher::SettingsPage::onResolutionChanged(int width, int height)
+{
+    mLastResolutionWidth = width;
+    mLastResolutionHeight = height;
+    if (recommendedScalingDefaultsCheckBox->checkState() == Qt::Checked
+        && (width != mLastRecommendedResolutionWidth || height != mLastRecommendedResolutionHeight))
+    {
+        if (applyRecommendedScalingDefaults(width, height))
+        {
+            mLastRecommendedResolutionWidth = width;
+            mLastRecommendedResolutionHeight = height;
+        }
+    }
 }
 
 void Launcher::SettingsPage::on_runScriptAfterStartupBrowseButton_clicked()
@@ -257,6 +399,7 @@ bool Launcher::SettingsPage::loadSettings()
             antialiasAlphaTestCheckBox->setCheckState(Qt::Unchecked);
         loadSettingBool(Settings::shaders().mAdjustCoverageForAlphaTest, *adjustCoverageForAlphaTestCheckBox);
         loadSettingBool(Settings::shaders().mWeatherParticleOcclusion, *weatherParticleOcclusionCheckBox);
+        loadSettingBool(Settings::shaders().mClassicWaterShader, *classicWaterShaderCheckBox);
         loadSettingBool(Settings::game().mUseMagicItemAnimations, *magicItemAnimationsCheckBox);
         connect(animSourcesCheckBox, &QCheckBox::toggled, this, &SettingsPage::slotAnimSourcesToggled);
         loadSettingBool(Settings::game().mUseAdditionalAnimSources, *animSourcesCheckBox);
@@ -371,6 +514,10 @@ bool Launcher::SettingsPage::loadSettings()
 
     // Interface Changes
     {
+        mLastResolutionWidth = Settings::video().mResolutionX;
+        mLastResolutionHeight = Settings::video().mResolutionY;
+        mLastRecommendedResolutionWidth = mLastResolutionWidth;
+        mLastRecommendedResolutionHeight = mLastResolutionHeight;
         loadSettingBool(Settings::game().mShowEffectDuration, *showEffectDurationCheckBox);
         loadSettingBool(Settings::game().mShowEnchantChance, *showEnchantChanceCheckBox);
         loadSettingBool(Settings::game().mShowMeleeInfo, *showMeleeInfoCheckBox);
@@ -378,13 +525,39 @@ bool Launcher::SettingsPage::loadSettings()
         loadSettingBool(Settings::gui().mColorTopicEnable, *changeDialogTopicsCheckBox);
         showOwnedComboBox->setCurrentIndex(Settings::game().mShowOwned);
         loadSettingBool(Settings::gui().mStretchMenuBackground, *stretchBackgroundCheckBox);
+        loadSettingBool(Settings::gui().mUnskippableIntroVideos, *unskippableIntroVideosCheckBox);
+        loadSettingBool(Settings::gui().mLuaHudHideInMenus, *luaAdjustmentsCheckBox);
         connect(controllerMenusCheckBox, &QCheckBox::toggled, this, &SettingsPage::slotControllerMenusToggled);
         loadSettingBool(Settings::gui().mControllerMenus, *controllerMenusCheckBox);
         loadSettingBool(Settings::gui().mControllerTooltips, *controllerMenuTooltipsCheckBox);
+        loadSettingBool(Settings::gui().mControllerJoystickDpad, *controllerMenuJoystickDpadCheckBox);
+        loadSettingBool(Settings::gui().mSingularContainerTradeWindow, *singularContainerTradeWindowCheckBox);
+        loadSettingBool(Settings::gui().mControllerHighlightSelections, *controllerMenuHighlightCheckBox);
+        loadSettingBool(Settings::gui().mXboxStyledDialog, *xboxStyledDialogCheckBox);
+        loadSettingBool(Settings::gui().mXboxAlchemyUi, *xboxAlchemyUiCheckBox);
+        loadSettingBool(Settings::gui().mXboxStyledMinimap, *xboxStyledMinimapCheckBox);
+        loadSettingBool(Settings::gui().mXboxStyledFonts, *xboxStyledFontsCheckBox);
+        loadSettingBool(Settings::gui().mXboxTabOrder, *xboxTabOrderCheckBox);
         loadSettingBool(Settings::map().mAllowZooming, *useZoomOnMapCheckBox);
         loadSettingBool(Settings::game().mGraphicHerbalism, *graphicHerbalismCheckBox);
-        scalingSpinBox->setValue(Settings::gui().mScalingFactor);
+        {
+            const QSignalBlocker blocker(recommendedScalingDefaultsCheckBox);
+            loadSettingBool(Settings::gui().mUseRecommendedScalingDefaults, *recommendedScalingDefaultsCheckBox);
+        }
+        const double interfaceScaling = Settings::gui().mScalingFactor;
+        const double dialogueScaling = Settings::gui().mDialogueInterfaceScaling;
+        const double settingsScaling = Settings::gui().mSettingsInterfaceScaling;
+        const double effectiveDialogueScaling = dialogueScaling > 0.0 ? dialogueScaling : interfaceScaling;
+        const double effectiveSettingsScaling = settingsScaling > 0.0
+            ? settingsScaling
+            : (Settings::gui().mSettingsWindowIgnoreScaling ? 1.0 : interfaceScaling);
+        setScalingValues(interfaceScaling, effectiveDialogueScaling, effectiveSettingsScaling);
         fontSizeSpinBox->setValue(Settings::gui().mFontSize);
+        loadSettingFloat(Settings::input().mGamepadCursorSpeed, *gamepadCursorSpeedSpinBox);
+        loadSettingBool(Settings::input().mEnableSoftwareMouse, *enableSoftwareMouseCheckBox);
+        controllerIconStyleComboBox->setCurrentIndex(
+            toIndexControllerIconStyle(Settings::input().mControllerIconStyle));
+        loadSettingBool(Settings::input().mControllerWhiteBlackButtonIcons, *controllerWhiteBlackButtonIconsCheckBox);
     }
 
     // Bug fixes
@@ -425,7 +598,68 @@ bool Launcher::SettingsPage::loadSettings()
         startDefaultCharacterAtField->setText(mGameSettings.value("start").value);
         runScriptAfterStartupField->setText(mGameSettings.value("script-run").value);
     }
+    mLastInterfaceScaling = scalingSpinBox->value();
     return true;
+}
+
+void Launcher::SettingsPage::onInterfaceScalingChanged(double value)
+{
+    const double delta = value - mLastInterfaceScaling;
+    if (std::abs(delta) < 0.0001)
+        return;
+
+    adjustCustomScaleWithInterfaceDelta(dialogueScalingSpinBox, delta);
+    adjustCustomScaleWithInterfaceDelta(settingsInterfaceScalingSpinBox, delta);
+
+    mLastInterfaceScaling = value;
+}
+
+void Launcher::SettingsPage::onDialogueScalingChanged(double value)
+{
+    clampCustomScale(dialogueScalingSpinBox, value);
+}
+
+void Launcher::SettingsPage::onSettingsInterfaceScalingChanged(double value)
+{
+    clampCustomScale(settingsInterfaceScalingSpinBox, value);
+}
+
+void Launcher::SettingsPage::setScalingValues(double interfaceScaling, double dialogueScaling, double settingsScaling)
+{
+    const QSignalBlocker interfaceBlocker(scalingSpinBox);
+    const QSignalBlocker dialogueBlocker(dialogueScalingSpinBox);
+    const QSignalBlocker settingsBlocker(settingsInterfaceScalingSpinBox);
+    scalingSpinBox->setValue(interfaceScaling);
+    dialogueScalingSpinBox->setValue(dialogueScaling);
+    settingsInterfaceScalingSpinBox->setValue(settingsScaling);
+    mLastInterfaceScaling = interfaceScaling;
+}
+
+bool Launcher::SettingsPage::applyRecommendedScalingDefaults(int width, int height)
+{
+    double interfaceScaling = 1.0;
+    double dialogueScaling = 1.0;
+    double settingsScaling = 1.0;
+    if (!tryGetRecommendedScaling(width, height, interfaceScaling, dialogueScaling, settingsScaling))
+    {
+        return false;
+    }
+
+    setScalingValues(interfaceScaling, dialogueScaling, settingsScaling);
+    return true;
+}
+
+void Launcher::SettingsPage::adjustCustomScaleWithInterfaceDelta(QDoubleSpinBox* spinBox, double delta) const
+{
+    const double customScale = spinBox->value();
+    if (customScale > 0.0)
+        spinBox->setValue(std::max(0.5, customScale + delta));
+}
+
+void Launcher::SettingsPage::clampCustomScale(QDoubleSpinBox* spinBox, double value)
+{
+    if (value > 0.0 && value < 0.5)
+        spinBox->setValue(0.5);
 }
 
 void Launcher::SettingsPage::populateLoadedConfigs()
@@ -556,6 +790,7 @@ void Launcher::SettingsPage::saveSettings()
         saveSettingBool(*antialiasAlphaTestCheckBox, Settings::shaders().mAntialiasAlphaTest);
         saveSettingBool(*adjustCoverageForAlphaTestCheckBox, Settings::shaders().mAdjustCoverageForAlphaTest);
         saveSettingBool(*weatherParticleOcclusionCheckBox, Settings::shaders().mWeatherParticleOcclusion);
+        saveSettingBool(*classicWaterShaderCheckBox, Settings::shaders().mClassicWaterShader);
         saveSettingBool(*magicItemAnimationsCheckBox, Settings::game().mUseMagicItemAnimations);
         saveSettingBool(*animSourcesCheckBox, Settings::game().mUseAdditionalAnimSources);
         saveSettingBool(*weaponSheathingCheckBox, Settings::game().mWeaponSheathing);
@@ -664,12 +899,30 @@ void Launcher::SettingsPage::saveSettings()
         saveSettingBool(*changeDialogTopicsCheckBox, Settings::gui().mColorTopicEnable);
         saveSettingInt(*showOwnedComboBox, Settings::game().mShowOwned);
         saveSettingBool(*stretchBackgroundCheckBox, Settings::gui().mStretchMenuBackground);
+        saveSettingBool(*unskippableIntroVideosCheckBox, Settings::gui().mUnskippableIntroVideos);
+        saveSettingBool(*luaAdjustmentsCheckBox, Settings::gui().mLuaHudHideInMenus);
         saveSettingBool(*controllerMenusCheckBox, Settings::gui().mControllerMenus);
         saveSettingBool(*controllerMenuTooltipsCheckBox, Settings::gui().mControllerTooltips);
+        saveSettingBool(*controllerMenuJoystickDpadCheckBox, Settings::gui().mControllerJoystickDpad);
+        saveSettingBool(*singularContainerTradeWindowCheckBox, Settings::gui().mSingularContainerTradeWindow);
+        saveSettingBool(*controllerMenuHighlightCheckBox, Settings::gui().mControllerHighlightSelections);
+        saveSettingBool(*xboxStyledDialogCheckBox, Settings::gui().mXboxStyledDialog);
+        saveSettingBool(*xboxAlchemyUiCheckBox, Settings::gui().mXboxAlchemyUi);
+        saveSettingBool(*xboxStyledMinimapCheckBox, Settings::gui().mXboxStyledMinimap);
+        saveSettingBool(*xboxStyledFontsCheckBox, Settings::gui().mXboxStyledFonts);
+        saveSettingBool(*xboxTabOrderCheckBox, Settings::gui().mXboxTabOrder);
         saveSettingBool(*useZoomOnMapCheckBox, Settings::map().mAllowZooming);
         saveSettingBool(*graphicHerbalismCheckBox, Settings::game().mGraphicHerbalism);
+        saveSettingBool(*recommendedScalingDefaultsCheckBox, Settings::gui().mUseRecommendedScalingDefaults);
         Settings::gui().mScalingFactor.set(scalingSpinBox->value());
+        Settings::gui().mDialogueInterfaceScaling.set(dialogueScalingSpinBox->value());
+        Settings::gui().mSettingsInterfaceScaling.set(settingsInterfaceScalingSpinBox->value());
         Settings::gui().mFontSize.set(fontSizeSpinBox->value());
+        saveSettingFloat(*gamepadCursorSpeedSpinBox, Settings::input().mGamepadCursorSpeed);
+        saveSettingBool(*enableSoftwareMouseCheckBox, Settings::input().mEnableSoftwareMouse);
+        Settings::input().mControllerIconStyle.set(
+            fromIndexControllerIconStyle(controllerIconStyleComboBox->currentIndex()));
+        saveSettingBool(*controllerWhiteBlackButtonIconsCheckBox, Settings::input().mControllerWhiteBlackButtonIcons);
     }
 
     // Bug fixes
@@ -727,6 +980,12 @@ void Launcher::SettingsPage::slotAnimSourcesToggled(bool checked)
 void Launcher::SettingsPage::slotControllerMenusToggled(bool checked)
 {
     controllerMenuTooltipsCheckBox->setEnabled(checked);
+    controllerMenuJoystickDpadCheckBox->setEnabled(checked);
+    singularContainerTradeWindowCheckBox->setEnabled(checked);
+    controllerMenuHighlightCheckBox->setEnabled(checked);
+    controllerIconStyleLabel->setEnabled(checked);
+    controllerIconStyleComboBox->setEnabled(checked);
+    controllerWhiteBlackButtonIconsCheckBox->setEnabled(checked);
 }
 
 void Launcher::SettingsPage::slotPostProcessToggled(bool checked)

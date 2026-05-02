@@ -57,6 +57,8 @@ namespace LuaUi
 
         void setExternal(const sol::main_object& external) { mExternal = external; }
 
+        void setGlobalVisible(bool visible);
+
         MyGUI::IntCoord forcedCoord();
         void forceCoord(const MyGUI::IntCoord& offset);
         void forceSize(const MyGUI::IntSize& size);
@@ -160,6 +162,7 @@ namespace LuaUi
 
         bool mPropagateEvents;
         bool mVisible; // used to implement updateVisible
+        bool mGlobalVisible; // global visibility override (e.g. HUD hidden)
 
     private:
         // use lua_State* instead of sol::state_view because MyGUI requires a default constructor

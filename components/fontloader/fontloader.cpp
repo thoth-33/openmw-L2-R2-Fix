@@ -247,21 +247,43 @@ namespace Gui
     void FontLoader::loadFonts()
     {
         constexpr FontId defaultFontId{ "DefaultFont" };
+        constexpr FontId dialogueBoldFontId{ "DialogueBoldFont" };
         constexpr FontId scrollFontId{ "ScrollFont" };
         constexpr FontId monoFontId{ "MonoFont" };
 
-        const std::string_view defaultFont = Fallback::Map::getString("Fonts_Font_0");
-        const std::string_view scrollFont = Fallback::Map::getString("Fonts_Font_2");
+        std::string defaultFont{ Fallback::Map::getString("Fonts_Font_0") };
+        std::string dialogueFont{ Fallback::Map::getString("Fonts_Font_1") };
+        std::string scrollFont{ Fallback::Map::getString("Fonts_Font_2") };
+
+        if (defaultFont.empty())
+            defaultFont = "MontserratMedium";
+        if (dialogueFont.empty())
+            dialogueFont = (defaultFont == "MontserratMedium") ? "MontserratSemiBold" : defaultFont;
+        if (scrollFont.empty())
+            scrollFont = "DemonicLetters";
 
         loadFont(defaultFontId, defaultFont);
+        loadFont(dialogueBoldFontId, dialogueFont);
         loadFont(scrollFontId, scrollFont);
-        // We need to use a TrueType monospace font to display debug texts properly.
-        loadFont(monoFontId, "DejaVuLGCSansMono");
+        // We need to use a TrueType font to display debug texts properly.
+        loadFont(monoFontId, "MontserratMedium");
 
         // Use our TrueType fonts as a fallback.
         if (!MyGUI::ResourceManager::getInstance().isExist(defaultFontId.mValue)
             && !Misc::StringUtils::ciEqual(defaultFont, "MysticCards"))
             loadFont(defaultFontId, "MysticCards");
+
+        if (!MyGUI::ResourceManager::getInstance().isExist(dialogueBoldFontId.mValue))
+        {
+            if (!Misc::StringUtils::ciEqual(dialogueFont, "MontserratSemiBold"))
+                loadFont(dialogueBoldFontId, "MontserratSemiBold");
+            if (!MyGUI::ResourceManager::getInstance().isExist(dialogueBoldFontId.mValue)
+                && !Misc::StringUtils::ciEqual(dialogueFont, defaultFont))
+                loadFont(dialogueBoldFontId, defaultFont);
+            if (!MyGUI::ResourceManager::getInstance().isExist(dialogueBoldFontId.mValue)
+                && !Misc::StringUtils::ciEqual(dialogueFont, "MysticCards"))
+                loadFont(dialogueBoldFontId, "MysticCards");
+        }
 
         if (!MyGUI::ResourceManager::getInstance().isExist(scrollFontId.mValue)
             && !Misc::StringUtils::ciEqual(scrollFont, "DemonicLetters"))

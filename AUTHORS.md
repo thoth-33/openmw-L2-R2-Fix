@@ -351,4 +351,3 @@ Thanks to Kevin Ryan,
 for creating the icon used for the Data Files tab of the OpenMW Launcher.
 
 Thanks to DejaVu team,
-for their DejaVuLGCSansMono fontface, see DejaVuFontLicense.txt for their license terms.

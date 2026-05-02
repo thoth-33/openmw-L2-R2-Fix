@@ -157,7 +157,7 @@ namespace MWScript
         public:
             void execute(Interpreter::Runtime& runtime) override
             {
-                runtime.push(MWBase::Environment::get().getWindowManager()->isGuiMode());
+                runtime.push(MWBase::Environment::get().getWindowManager()->isGuiModeForScript());
             }
         };
 

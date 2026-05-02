@@ -401,6 +401,8 @@ namespace MWGui::Formatting
     void BookFormatter::resetFontProperties()
     {
         mTextStyle = TextStyle();
+        if (mUseDialogueBoldFont)
+            mTextStyle.mFont = "DialogueBoldFont";
     }
 
     void BookFormatter::handleDiv(const BookTextParser::Attributes& attr)
@@ -436,8 +438,17 @@ namespace MWGui::Formatting
         {
             const std::string& face = it->second;
             std::string name{ Gui::FontLoader::getFontForFace(face) };
-
-            mTextStyle.mFont = "Journalbook " + name;
+            if (mUseDialogueBoldFont)
+            {
+                if (Misc::StringUtils::ciEqual(name, "DefaultFont"))
+                    mTextStyle.mFont = "DialogueBoldFont";
+                else
+                    mTextStyle.mFont = name;
+            }
+            else
+            {
+                mTextStyle.mFont = "Journalbook " + name;
+            }
         }
         if (attr.find("size") != attr.end())
         {

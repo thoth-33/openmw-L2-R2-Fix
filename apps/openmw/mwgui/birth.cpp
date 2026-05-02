@@ -19,6 +19,7 @@
 #include "../mwworld/esmstore.hpp"
 #include "../mwworld/player.hpp"
 
+#include "tooltips.hpp"
 #include "widgets.hpp"
 
 namespace
@@ -49,6 +50,15 @@ namespace MWGui
         mBirthList->setScrollVisible(true);
         mBirthList->eventListSelectAccept += MyGUI::newDelegate(this, &BirthDialog::onAccept);
         mBirthList->eventListChangePosition += MyGUI::newDelegate(this, &BirthDialog::onSelectBirth);
+        mBirthList->eventListChangeScroll += MyGUI::newDelegate(this, &BirthDialog::onListScroll);
+
+        if (MyGUI::Widget* client = mBirthList->getClientWidget())
+        {
+            mControllerHighlight = client->createWidget<MyGUI::Widget>(
+                "ControllerHighlight", MyGUI::IntCoord(0, 0, 0, 0), MyGUI::Align::Default);
+            mControllerHighlight->setNeedMouseFocus(false);
+            mControllerHighlight->setVisible(false);
+        }
 
         getWidget(mBackButton, "BackButton");
         mBackButton->eventMouseButtonClick += MyGUI::newDelegate(this, &BirthDialog::onBackClicked);
@@ -60,7 +70,6 @@ namespace MWGui
 
         if (Settings::gui().mControllerMenus)
         {
-            mControllerButtons.mLStick = "#{Interface:Mouse}";
             mControllerButtons.mA = "#{Interface:Select}";
             mControllerButtons.mB = "#{Interface:Back}";
         }
@@ -79,12 +88,14 @@ namespace MWGui
             okButton->setCaption(
                 MyGUI::UString(MWBase::Environment::get().getWindowManager()->getGameSettingString("sNext", {})));
             mControllerButtons.mX = "#{Interface:Next}";
+            mControllerButtons.mXAfterB = true;
         }
         else if (Settings::gui().mControllerMenus)
         {
             okButton->setCaption(
                 MyGUI::UString(MWBase::Environment::get().getWindowManager()->getGameSettingString("sDone", {})));
             mControllerButtons.mX = "#{Interface:Done}";
+            mControllerButtons.mXAfterB = true;
         }
         else
             okButton->setCaption(
@@ -103,6 +114,8 @@ namespace MWGui
 
         if (!signId.empty())
             setBirthId(signId);
+
+        updateControllerListHighlight(mBirthList, mControllerHighlight);
     }
 
     void BirthDialog::setBirthId(const ESM::RefId& birthId)
@@ -120,6 +133,12 @@ namespace MWGui
         }
 
         updateSpells();
+        updateControllerListHighlight(mBirthList, mControllerHighlight);
+    }
+
+    MyGUI::Widget* BirthDialog::getControllerFocusTooltipWidget() const
+    {
+        return mBirthList;
     }
 
     // widget controls
@@ -147,14 +166,26 @@ namespace MWGui
     void BirthDialog::onSelectBirth(MyGUI::ListBox* /*sender*/, size_t index)
     {
         if (index == MyGUI::ITEM_NONE)
+        {
+            updateControllerListHighlight(mBirthList, mControllerHighlight);
             return;
+        }
 
         const ESM::RefId& birthId = *mBirthList->getItemDataAt<ESM::RefId>(index);
         if (mCurrentBirthId == birthId)
+        {
+            updateControllerListHighlight(mBirthList, mControllerHighlight);
             return;
+        }
 
         mCurrentBirthId = birthId;
         updateSpells();
+        updateControllerListHighlight(mBirthList, mControllerHighlight);
+    }
+
+    void BirthDialog::onListScroll(MyGUI::ListBox* sender, size_t /*position*/)
+    {
+        updateControllerListHighlight(sender, mControllerHighlight);
     }
 
     // update widget content
@@ -190,6 +221,8 @@ namespace MWGui
 
             index++;
         }
+
+        updateControllerListHighlight(mBirthList, mControllerHighlight);
     }
 
     void BirthDialog::updateSpells()
@@ -210,6 +243,12 @@ namespace MWGui
         const MWWorld::ESMStore& store = *MWBase::Environment::get().getESMStore();
 
         const ESM::BirthSign* birth = store.get<ESM::BirthSign>().find(mCurrentBirthId);
+
+        mBirthList->clearUserString("ToolTipType");
+        mBirthList->clearUserString("ToolTipLayout");
+        mBirthList->clearUserString("CollapsedLabel");
+        mBirthList->clearUserString("CollapsedValue");
+        mBirthList->clearUserString("ForceCollapsedTooltip");
 
         mBirthImage->setImageTexture(Misc::ResourceHelpers::correctTexturePath(
             VFS::Path::toNormalized(birth->mTexture), *MWBase::Environment::get().getResourceSystem()->getVFS()));

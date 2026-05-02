@@ -18,6 +18,7 @@
 #include <components/resource/imagemanager.hpp>
 #include <components/resource/resourcesystem.hpp>
 #include <components/resource/scenemanager.hpp>
+#include <components/vfs/manager.hpp>
 
 #include <components/sceneutil/depth.hpp>
 #include <components/sceneutil/rtt.hpp>
@@ -689,15 +690,36 @@ namespace MWRender
 
         Stereo::shaderStereoDefines(defineMap);
 
+        const bool useClassicWaterShader = Settings::shaders().mClassicWaterShader;
         Shader::ShaderManager& shaderMgr = mResourceSystem->getSceneManager()->getShaderManager();
-        osg::ref_ptr<osg::Program> program = shaderMgr.getProgram("water", defineMap);
+        osg::ref_ptr<osg::Program> program;
+        if (useClassicWaterShader)
+        {
+            osg::ref_ptr<osg::Shader> vertex = shaderMgr.getShader("water.vert", defineMap, osg::Shader::VERTEX);
+            osg::ref_ptr<osg::Shader> fragment
+                = shaderMgr.getShader("water_classic.frag", defineMap, osg::Shader::FRAGMENT);
+            if (vertex != nullptr && fragment != nullptr)
+                program = shaderMgr.getProgram(std::move(vertex), std::move(fragment));
+        }
+        if (program == nullptr)
+            program = shaderMgr.getProgram("water", defineMap);
 
-        constexpr VFS::Path::NormalizedView waterImage("textures/omw/water_nm.png");
+        constexpr VFS::Path::NormalizedView defaultWaterImage("textures/omw/water_nm.png");
+        constexpr VFS::Path::NormalizedView classicWaterImage("textures/omw/water_nm_classic.png");
+        const VFS::Path::NormalizedView waterImage
+            = useClassicWaterShader && mResourceSystem->getVFS()->exists(classicWaterImage) ? classicWaterImage
+                                                                                            : defaultWaterImage;
         osg::ref_ptr<osg::Texture2D> normalMap(
             new osg::Texture2D(mResourceSystem->getImageManager()->getImage(waterImage)));
         normalMap->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
         normalMap->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
         mResourceSystem->getSceneManager()->applyFilterSettings(normalMap);
+        if (useClassicWaterShader)
+        {
+            // Keep classic water detail stable regardless of global texture filtering setting.
+            normalMap->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR);
+            normalMap->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+        }
 
         mRainSettingsUpdater = new RainSettingsUpdater();
         node->setUpdateCallback(mRainSettingsUpdater);

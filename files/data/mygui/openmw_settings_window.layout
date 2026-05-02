@@ -1,7 +1,9 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
     <Widget type="Window" skin="MW_Window" position="0 0 400 485" layer="Settings" name="_Main">
-        <Property key="MinSize" value="640 550"/>
+        <Property key="MinSize" value="710 540"/>
+        <Property key="Movable" value="true"/>
+        <UserString key="SettingsTooltipPipeline" value="true"/>
         <Widget type="TabControl" skin="TabControl" position="8 8 368 405" align="Stretch" name="SettingsTab">
             <Property key="ButtonAutoWidth" value="true"/>
             <Widget type="TabItem">
@@ -280,7 +282,7 @@
                             <Property key="Caption" value="#{OMWEngine:WindowMode}"/>
                         </Widget>
                         <Widget type="HBox" position="207 24 400 24">
-                            <Widget type="ComboBox" skin="MW_ComboBox" position="0 0 200 24" align="Left Top" name="WindowModeList">
+                            <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 0 200 24" align="Left Top" name="WindowModeList">
                                 <Property key="AddItem" value="#{OMWEngine:WindowModeFullscreen}"/>
                                 <Property key="AddItem" value="#{OMWEngine:WindowModeWindowedFullscreen}"/>
                                 <Property key="AddItem" value="#{OMWEngine:WindowModeWindowed}"/>
@@ -290,7 +292,7 @@
                             <Property key="Caption" value="#{OMWEngine:VSync}"/>
                         </Widget>
                         <Widget type="HBox" position="207 74 400 28">
-                            <Widget type="ComboBox" skin="MW_ComboBox" position="0 0 200 24" align="Left Top" name="VSyncModeList">
+                            <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 0 200 24" align="Left Top" name="VSyncModeList">
                                 <Property key="AddItem" value="#{Interface:Off}"/>
                                 <Property key="AddItem" value="#{Interface:On}"/>
                                 <Property key="AddItem" value="#{OMWEngine:VSyncAdaptive}"/>
@@ -380,7 +382,8 @@
                             <UserString key="VStretch" value="false"/>
                             <UserString key="HStretch" value="false"/>
                         </Widget>
-                        <Widget type="ComboBox" align="Left Top" skin="MW_ComboBox" position="0 28 200 24" name="TextureFilteringButton">
+                        <Widget type="ComboBox" align="Left Top" skin="MW_ComboBoxSettings" position="0 28 200 24" name="TextureFilteringButton">
+                            <Property key="AddItem" value="#{OMWEngine:TextureFilteringNearest}"/>
                             <Property key="AddItem" value="#{OMWEngine:TextureFilteringBilinear}"/>
                             <Property key="AddItem" value="#{OMWEngine:TextureFilteringTrilinear}"/>
                         </Widget>
@@ -507,7 +510,7 @@
                             <Widget type="HBox" align="Stretch">
                                 <UserString key="HStretch" value="true"/>
                                 <UserString key="VStretch" value="false"/>
-                                <Widget type="ComboBox" skin="MW_ComboBox" position="0 0 200 24" align="Left Top" name="WaterTextureSize">
+                                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 0 200 24" align="Left Top" name="WaterTextureSize">
                                     <Property key="AddItem" value="#{OMWEngine:QualityLow}"/>
                                     <Property key="AddItem" value="#{OMWEngine:QualityMedium}"/>
                                     <Property key="AddItem" value="#{OMWEngine:QualityHigh}"/>
@@ -526,7 +529,7 @@
                                 <UserString key="HStretch" value="true"/>
                                 <UserString key="VStretch" value="false"/>
 
-                                <Widget type="ComboBox" skin="MW_ComboBox" position="0 0 200 24" align="Left Top" name="WaterReflectionDetail">
+                                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 0 200 24" align="Left Top" name="WaterReflectionDetail">
                                     <Property key="AddItem" value="#{OMWEngine:ReflectionShaderDetailSky}"/>
                                     <Property key="AddItem" value="#{OMWEngine:ReflectionShaderDetailTerrain}"/>
                                     <Property key="AddItem" value="#{OMWEngine:ReflectionShaderDetailWorld}"/>
@@ -549,7 +552,7 @@
                                 <UserString key="HStretch" value="true"/>
                                 <UserString key="VStretch" value="false"/>
 
-                                <Widget type="ComboBox" skin="MW_ComboBox" position="0 0 200 24" align="Left Top" name="WaterRainRippleDetail">
+                                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 0 200 24" align="Left Top" name="WaterRainRippleDetail">
                                     <Property key="AddItem" value="#{OMWEngine:RainRippleDetailSimple}"/>
                                     <Property key="AddItem" value="#{OMWEngine:RainRippleDetailSparse}"/>
                                     <Property key="AddItem" value="#{OMWEngine:RainRippleDetailDense}"/>
@@ -574,7 +577,7 @@
                                     <UserString key="ToolTipLayout" value="TextToolTip"/>
                                     <UserString key="Caption_Text" value="#{OMWEngine:LightsLightingMethodTooltip}"/>
                                 </Widget>
-                                <Widget type="ComboBox" skin="MW_ComboBox" position="0 28 250 24" align="Left Top" name="LightingMethodButton">
+                                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="0 28 250 24" align="Left Top" name="LightingMethodButton">
                                     <Property key="AddItem" value="shaders compatibility"/>
                                     <Property key="AddItem" value="shaders"/>
                                 </Widget>
@@ -591,7 +594,7 @@
                                     <UserString key="SettingLabelWidget" value="MaxLightsText"/>
                                     <UserString key="SettingLabelCaption" value="MaxLightsValue"/>
                                 </Widget>
-                                <Widget type="ComboBox" skin="MW_ComboBox" position="258 28 250 24" align="Left Top" name="MaxLights">
+                                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="258 28 250 24" align="Left Top" name="MaxLights">
                                     <Property key="AddItem" value="8"/>
                                     <Property key="AddItem" value="16"/>
                                     <Property key="AddItem" value="24"/>
@@ -835,7 +838,7 @@
                     <UserString key="ToolTipLayout" value="TextToolTip"/>
                     <UserString key="Caption_Text" value="#{OMWEngine:PrimaryLanguageTooltip}"/>
                 </Widget>
-                <Widget type="ComboBox" skin="MW_ComboBox" position="4 52 250 24" align="Left Top" name="PrimaryLanguage" />
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="4 52 250 24" align="Left Top" name="PrimaryLanguage" />
                 <!-- Secondary Language -->
                 <Widget type="TextBox" skin="NormalText" position="262 28 250 18" align="Left Top">
                     <Property key="Caption" value="#{OMWEngine:SecondaryLanguage}"/>
@@ -843,8 +846,28 @@
                     <UserString key="ToolTipLayout" value="TextToolTip"/>
                     <UserString key="Caption_Text" value="#{OMWEngine:SecondaryLanguageTooltip}"/>
                 </Widget>
-                <Widget type="ComboBox" skin="MW_ComboBox" position="262 52 250 24" align="Left Top" name="SecondaryLanguage" />
-                <Widget type="HBox" position="4 84 500 32">
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="262 52 250 24" align="Left Top" name="SecondaryLanguage" />
+                <!-- Primary Keyboard Language -->
+                <Widget type="TextBox" skin="NormalText" position="4 84 250 18" align="Left Top">
+                    <Property key="Caption" value="#{OMWEngine:PrimaryKeyboardLanguage}"/>
+                </Widget>
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="4 108 250 24" align="Left Top" name="KeyboardPrimaryLanguage" />
+                <!-- Secondary Keyboard Language -->
+                <Widget type="TextBox" skin="NormalText" position="262 84 250 18" align="Left Top">
+                    <Property key="Caption" value="#{OMWEngine:SecondaryKeyboardLanguage}"/>
+                </Widget>
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="262 108 250 24" align="Left Top" name="KeyboardSecondaryLanguage" />
+                <!-- Primary Keyboard Layout -->
+                <Widget type="TextBox" skin="NormalText" position="4 140 250 18" align="Left Top">
+                    <Property key="Caption" value="#{OMWEngine:PrimaryKeyboardLayout}"/>
+                </Widget>
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="4 164 250 24" align="Left Top" name="KeyboardPrimaryLayout" />
+                <!-- Secondary Keyboard Layout -->
+                <Widget type="TextBox" skin="NormalText" position="262 140 250 18" align="Left Top" name="KeyboardSecondaryLayoutLabel">
+                    <Property key="Caption" value="#{OMWEngine:SecondaryKeyboardLayout}"/>
+                </Widget>
+                <Widget type="ComboBox" skin="MW_ComboBoxSettings" position="262 164 250 24" align="Left Top" name="KeyboardSecondaryLayout" />
+                <Widget type="HBox" position="4 196 500 32">
                     <Widget type="AutoSizedButton" skin="MW_Button" name="GmstOverridesL10nButton">
                         <UserString key="SettingCategory" value="General"/>
                         <UserString key="SettingName" value="gmst overrides l10n"/>
@@ -855,6 +878,10 @@
                     </Widget>
                 </Widget>
             </Widget>
+        </Widget>
+        <Widget name="ScalingRestartHint" type="TextBox" skin="SandText" position="8 420 600 16" align="Left Bottom">
+            <Property key="Caption" value="Note: The game must be restarted for the new scaling preset to apply after adjusting the resolution."/>
+            <Property key="TextAlign" value="Left"/>
         </Widget>
         <Widget type="AutoSizedButton" skin="MW_Button" position="320 420 56 24" align="Right Bottom" name="OkButton">
             <Property key="ExpandDirection" value="Left"/>

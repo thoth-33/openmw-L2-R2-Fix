@@ -5,6 +5,7 @@
 #include <components/misc/osgpluginchecker.hpp>
 #include <components/misc/rng.hpp>
 #include <components/platform/platform.hpp>
+#include <components/settings/values.hpp>
 #include <components/version/version.hpp>
 
 #include "mwgui/debugwindow.hpp"
@@ -13,6 +14,10 @@
 #include "options.hpp"
 
 #include <boost/program_options/variables_map.hpp>
+
+#if defined(__linux__)
+#include <cstdlib>
+#endif
 
 #if defined(_WIN32)
 #include <components/misc/windows.hpp>
@@ -69,6 +74,12 @@ bool parseOptions(int argc, char** argv, OMW::Engine& engine, Files::Configurati
     Log(Debug::Info) << Version::getOpenmwVersionDescription();
 
     Settings::Manager::load(cfgMgr);
+
+    if (Settings::gui().mControllerTooltips)
+    {
+        Settings::gui().mControllerTooltips.set(false);
+        Settings::Manager::saveUser(cfgMgr.getUserConfigPath() / "settings.cfg");
+    }
 
     MWGui::DebugWindow::startLogRecording();
 
@@ -152,7 +163,18 @@ bool parseOptions(int argc, char** argv, OMW::Engine& engine, Files::Configurati
     engine.setSaveGameFile(variables["load-savegame"].as<Files::MaybeQuotedPath>().u8string());
 
     // other settings
-    Fallback::Map::init(variables["fallback"].as<Fallback::FallbackMap>().mMap);
+    auto fallbackMap = variables["fallback"].as<Fallback::FallbackMap>().mMap;
+    if (Settings::gui().mXboxStyledFonts)
+    {
+        fallbackMap["Fonts_Font_0"] = "MontserratMedium";
+        fallbackMap["Fonts_Font_1"] = "MontserratSemiBold";
+    }
+    else
+    {
+        fallbackMap["Fonts_Font_0"] = "MysticCards";
+        fallbackMap["Fonts_Font_1"] = "MysticCards";
+    }
+    Fallback::Map::init(fallbackMap);
     engine.setSoundUsage(!variables["no-sound"].as<bool>());
     engine.setActivationDistanceOverride(variables["activate-dist"].as<int>());
     engine.enableFontExport(variables["export-fonts"].as<bool>());
@@ -240,6 +262,9 @@ extern "C" int SDL_main(int argc, char** argv)
 int main(int argc, char** argv)
 #endif
 {
+#if defined(__linux__)
+    ::setenv("SteamDeck", "0", /*overwrite*/ 1);
+#endif
     return Debug::wrapApplication(&runApplication, argc, argv, "OpenMW");
 }
 

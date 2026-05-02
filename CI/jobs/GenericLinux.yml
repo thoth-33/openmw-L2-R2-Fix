@@ -1,0 +1,17 @@
+GenericLinux:
+  extends: .Ubuntu_Image
+  stage: build
+  cache:
+    paths:
+      - apt-cache/
+      - ccache/
+  before_script:
+    - CI/install_debian_deps.sh gcc_preprocess openmw-deps openmw-deps-dynamic
+  variables:
+    ARCHIVE_TAR: "0"
+  script:
+    - chmod +x CI/build_openmw_generic_xz.sh
+    - CI/build_openmw_generic_xz.sh
+  artifacts:
+    paths:
+      - OpenMW-XBOX-UI

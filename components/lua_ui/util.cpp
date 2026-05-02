@@ -57,6 +57,27 @@ namespace LuaUi
             Element::erase(Element::sMenuElements.begin()->second.get());
     }
 
+    bool isAnyElementVisibleOnLayer(std::string_view layerName)
+    {
+        bool visible = false;
+        auto check = [&](Element* element) {
+            if (visible || element == nullptr || element->mRoot == nullptr)
+                return;
+            MyGUI::Widget* w = element->mRoot->widget();
+            if (!w || !w->getInheritedVisible())
+                return;
+            MyGUI::ILayer* layer = w->getLayer();
+            if (!layer)
+                return;
+            if (layer->getName() == layerName)
+                visible = true;
+        };
+
+        Element::forEach(true, check);
+        Element::forEach(false, check);
+        return visible;
+    }
+
     bool warnUnused(std::vector<std::string>& warnings, sol::object object, const std::string& tableName,
         const std::vector<std::string_view>& usedKeys, bool generateWarningStrings)
     {

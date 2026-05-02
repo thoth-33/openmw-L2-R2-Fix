@@ -192,8 +192,19 @@ namespace MWSound
         min = std::max(min, 1.0f);
         max = std::max(min, max);
 
-        SoundBuffer& sfx = mSoundBuffers.emplace_back(
-            Misc::ResourceHelpers::correctSoundPath(VFS::Path::toNormalized(sound.mSound)), volume, min, max);
+        VFS::Path::Normalized soundFile = VFS::Path::toNormalized(sound.mSound);
+        static const ESM::RefId menuClickSoundId = ESM::RefId::stringRefId("Menu Click");
+        const auto filename = VFS::Path::NormalizedView(soundFile).filename();
+        const bool isMenuClick
+            = soundId == menuClickSoundId || filename == "menu click.wav" || filename == "menu click.mp3";
+        if (isMenuClick)
+        {
+            soundFile = VFS::Path::Normalized("Fx\\inter\\menuNEWxbx.wav");
+            volume = 0.6f;
+        }
+
+        SoundBuffer& sfx
+            = mSoundBuffers.emplace_back(Misc::ResourceHelpers::correctSoundPath(soundFile), volume, min, max);
 
         mBufferNameMap.emplace(soundId, &sfx);
         return &sfx;

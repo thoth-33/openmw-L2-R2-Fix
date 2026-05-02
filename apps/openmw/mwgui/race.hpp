@@ -48,6 +48,7 @@ namespace MWGui
         void setNextButtonShow(bool shown);
         void onOpen() override;
         void onClose() override;
+        void onFrame(float dt) override;
 
         bool exit() override { return false; }
 
@@ -79,6 +80,7 @@ namespace MWGui
 
         void onSelectRace(MyGUI::ListBox* sender, size_t index);
         void onAccept(MyGUI::ListBox* sender, size_t index);
+        void onListScroll(MyGUI::ListBox* sender, size_t position);
 
         void onOkClicked(MyGUI::Widget* sender);
         void onBackClicked(MyGUI::Widget* sender);
@@ -100,6 +102,7 @@ namespace MWGui
 
         MyGUI::ImageBox* mPreviewImage;
         MyGUI::ListBox* mRaceList;
+        MyGUI::Widget* mControllerHighlight = nullptr;
         MyGUI::ScrollBar* mHeadRotate;
         MyGUI::Button* mBackButton;
         MyGUI::Button* mOkButton;
@@ -115,6 +118,15 @@ namespace MWGui
         ESM::RefId mCurrentRaceId;
 
         float mCurrentAngle;
+        float mHeadRotateCarry = 0.f;
+        float mHeadRotateAxis = 0.f;
+
+        bool mLeftTriggerHeld = false;
+        bool mRightTriggerHeld = false;
+        bool mHairButtonPending = false;
+        bool mFaceButtonPending = false;
+        bool mHairChordUsed = false;
+        bool mFaceChordUsed = false;
 
         std::unique_ptr<MWRender::RaceSelectionPreview> mPreview;
         std::unique_ptr<MyGUI::ITexture> mPreviewTexture;

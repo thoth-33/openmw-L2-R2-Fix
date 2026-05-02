@@ -35,7 +35,7 @@ namespace Resource
         constexpr std::size_t pageSize
             = static_cast<std::size_t>((maxStatsHeight - 2 * backgroundMargin) / characterSize);
         constexpr int statsHandlerKey = osgGA::GUIEventAdapter::KEY_F4;
-        const VFS::Path::Normalized fontName("Fonts/DejaVuLGCSansMono.ttf");
+        const VFS::Path::Normalized fontName("Fonts/MontserratMedium.ttf");
 
         bool collectStatRendering = false;
         bool collectStatCameraObjects = false;

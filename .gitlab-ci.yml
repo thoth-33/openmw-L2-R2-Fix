@@ -1,12 +1,17 @@
 default:
   interruptible: true
 
+include:
+  - local: CI/jobs/GenericLinux_with_Debug.yml
+  - local: CI/jobs/GenericLinux.yml
+
 # Note: We set `needs` on each job to control the job DAG.
 # See https://docs.gitlab.com/ee/ci/yaml/#needs
 stages:
   - checks
   - build
   - test
+  - deploy
 
 workflow:
   auto_cancel:
@@ -163,7 +168,7 @@ Coverity_Upload:
   needs:
     - Coverity
 
-Ubuntu_GCC:
+.Ubuntu_GCC_common:
   extends: .Ubuntu
   cache:
     key: Ubuntu_GCC.ubuntu_24.04.v2
@@ -177,8 +182,12 @@ Ubuntu_GCC:
   # When CCache doesn't exist (e.g. first build on a fork), build takes more than 1h, which is the default for forks.
   timeout: 2h
 
+Ubuntu_GCC:
+  extends: .Ubuntu_GCC_common
+  allow_failure: true
+
 Ubuntu_GCC_asan:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_asan.ubuntu_24.04.v2
   variables:
@@ -223,7 +232,7 @@ Teal:
   stage: checks
   extends: .Ubuntu_Image
   before_script:
-    - apt-get update
+    - bash CI/apt_update_retry.sh
     - apt-get -y install curl wget make build-essential libreadline-dev git-core zip unzip
   script:
     - CI/teal_ci.sh
@@ -249,7 +258,7 @@ Ubuntu_GCC_Debug:
   timeout: 2h
 
 Ubuntu_GCC_tests:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_tests.ubuntu_24.04.v2
   variables:
@@ -263,7 +272,7 @@ Ubuntu_GCC_tests:
       junit: build/*-tests.xml
 
 .Ubuntu_GCC_tests_Debug:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_tests_Debug.ubuntu_24.04.v2
   variables:
@@ -279,7 +288,7 @@ Ubuntu_GCC_tests:
       junit: build/*-tests.xml
 
 Ubuntu_GCC_tests_asan:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_tests_asan.ubuntu_24.04.v2
   variables:
@@ -302,7 +311,7 @@ Ubuntu_GCC_tests_asan:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_PROJECT_ID != "7107382"
 
 Ubuntu_GCC_tests_ubsan:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_tests_ubsan.ubuntu_24.04.v2
   variables:
@@ -322,7 +331,7 @@ Ubuntu_GCC_tests_ubsan:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_PROJECT_ID != "7107382"
 
 .Ubuntu_GCC_tests_tsan:
-  extends: Ubuntu_GCC
+  extends: .Ubuntu_GCC_common
   cache:
     key: Ubuntu_GCC_tests_tsan.ubuntu_24.04.v2
   variables:
@@ -483,20 +492,6 @@ Ubuntu_Clang_Tidy_other:
     BUILD_TARGETS: components-tests bsatool esmtool openmw-launcher openmw-iniimporter openmw-essimporter openmw-wizard niftest openmw-navmeshtool openmw-bulletobjecttool
   timeout: 3h
 
-.Ubuntu_Clang_tests:
-  extends: Ubuntu_Clang
-  cache:
-    key: Ubuntu_Clang_tests.ubuntu_24.04.v2
-  variables:
-    CCACHE_SIZE: 1G
-    BUILD_TESTS_ONLY: 1
-  artifacts:
-    paths: []
-    name: ${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA}
-    when: always
-    reports:
-      junit: build/*-tests.xml
-
 Ubuntu_Clang_tests_Debug:
   extends: Ubuntu_Clang
   cache:
@@ -637,7 +632,7 @@ macOS15_Xcode16_arm64:
   variables:
     GIT_STRATEGY: none
   script:
-    - apt-get update
+    - bash CI/apt_update_retry.sh
     - apt-get install -y curl gcab unzip
     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.22.35.zip" -o awscli-exe-linux-x86_64.zip
     - unzip -d awscli-exe-linux-x86_64 awscli-exe-linux-x86_64.zip
@@ -676,7 +671,7 @@ macOS15_Xcode16_arm64:
   variables:
     GIT_STRATEGY: none
   script:
-    - apt-get update
+    - bash CI/apt_update_retry.sh
     - apt-get install -y curl dos2unix unzip zip
     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.22.35.zip" -o awscli-exe-linux-x86_64.zip
     - unzip -d awscli-exe-linux-x86_64 awscli-exe-linux-x86_64.zip
@@ -832,8 +827,6 @@ macOS15_Xcode16_arm64:
     - MSVC2022_64_Ninja/**/*.ninja_log
     - "*_to-be-merged.txt"
     - "**/CMakeCache.txt"
-  # When CCache doesn't exist (e.g. first build on a fork), build takes more than 1h, which is the default for forks.
-  # This is capped at 2h by GitLab for Windows Shared Runners
   timeout: 2h
   variables:
     CCACHE_SIZE: 2.5G

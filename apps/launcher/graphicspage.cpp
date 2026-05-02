@@ -6,6 +6,7 @@
 #include <components/settings/values.hpp>
 
 #include <QMessageBox>
+#include <QRegularExpression>
 #include <QScreen>
 
 #ifdef MAC_OS_X_VERSION_MIN_REQUIRED
@@ -34,6 +35,10 @@ Launcher::GraphicsPage::GraphicsPage(QWidget* parent)
     connect(standardRadioButton, &QRadioButton::toggled, this, &GraphicsPage::slotStandardToggled);
     connect(screenComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this, &GraphicsPage::screenChanged);
     connect(framerateLimitCheckBox, &QCheckBox::toggled, this, &GraphicsPage::slotFramerateLimitToggled);
+    connect(resolutionComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this,
+        &GraphicsPage::emitResolutionChanged);
+    connect(customWidthSpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &GraphicsPage::emitResolutionChanged);
+    connect(customHeightSpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &GraphicsPage::emitResolutionChanged);
 }
 
 bool Launcher::GraphicsPage::setupSDL()
@@ -75,8 +80,12 @@ bool Launcher::GraphicsPage::setupSDL()
 
 bool Launcher::GraphicsPage::loadSettings()
 {
+    mIgnoreResolutionChanges = true;
     if (!setupSDL())
+    {
+        mIgnoreResolutionChanges = false;
         return false;
+    }
 
     // Visuals
 
@@ -125,6 +134,8 @@ bool Launcher::GraphicsPage::loadSettings()
         framerateLimitSpinBox->setValue(fpsLimit);
     }
 
+    mIgnoreResolutionChanges = false;
+    emitResolutionChanged();
     return true;
 }
 
@@ -141,7 +152,7 @@ void Launcher::GraphicsPage::saveSettings()
     int cHeight = 0;
     if (standardRadioButton->isChecked())
     {
-        QRegularExpression resolutionRe("^(\\d+) × (\\d+)");
+        QRegularExpression resolutionRe(R"(^(\d+)\D+(\d+))");
         QRegularExpressionMatch match = resolutionRe.match(resolutionComboBox->currentText().simplified());
         if (match.hasMatch())
         {
@@ -231,11 +242,13 @@ void Launcher::GraphicsPage::screenChanged(int screen)
         resolutionComboBox->clear();
         resolutionComboBox->addItems(mResolutionsPerScreen[screen]);
     }
+    emitResolutionChanged();
 }
 
 void Launcher::GraphicsPage::slotFullScreenChanged(int mode)
 {
     handleWindowModeChange(static_cast<Settings::WindowMode>(mode));
+    emitResolutionChanged();
 }
 
 void Launcher::GraphicsPage::handleWindowModeChange(Settings::WindowMode mode)
@@ -303,9 +316,40 @@ void Launcher::GraphicsPage::slotStandardToggled(bool checked)
         customWidthSpinBox->setEnabled(true);
         customHeightSpinBox->setEnabled(true);
     }
+    emitResolutionChanged();
 }
 
 void Launcher::GraphicsPage::slotFramerateLimitToggled(bool checked)
 {
     framerateLimitSpinBox->setEnabled(checked);
+}
+
+void Launcher::GraphicsPage::emitResolutionChanged()
+{
+    if (mIgnoreResolutionChanges)
+        return;
+
+    int width = 0;
+    int height = 0;
+    if (getCurrentResolution(width, height))
+        emit resolutionChanged(width, height);
+}
+
+bool Launcher::GraphicsPage::getCurrentResolution(int& width, int& height) const
+{
+    if (standardRadioButton->isChecked())
+    {
+        QRegularExpression resolutionRe(R"((\d+)\D+(\d+))");
+        QRegularExpressionMatch match = resolutionRe.match(resolutionComboBox->currentText().simplified());
+        if (match.hasMatch())
+        {
+            width = match.captured(1).toInt();
+            height = match.captured(2).toInt();
+            return true;
+        }
+    }
+
+    width = customWidthSpinBox->value();
+    height = customHeightSpinBox->value();
+    return true;
 }

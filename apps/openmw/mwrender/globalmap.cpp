@@ -1,5 +1,7 @@
 #include "globalmap.hpp"
 
+#include <algorithm>
+
 #include <osg/Geometry>
 #include <osg/Group>
 #include <osg/Image>
@@ -308,6 +310,29 @@ namespace MWRender
         imageX = (float(x / float(Constants::CellSizeInUnits) - mMinX) / (mMaxX - mMinX + 1)) * getWidth();
 
         imageY = (1.f - float(z / float(Constants::CellSizeInUnits) - mMinY) / (mMaxY - mMinY + 1)) * getHeight();
+    }
+
+    void GlobalMap::imageSpaceToWorldPos(float imageX, float imageY, float& worldX, float& worldY)
+    {
+        if (getWidth() <= 0 || getHeight() <= 0)
+        {
+            worldX = 0.f;
+            worldY = 0.f;
+            return;
+        }
+
+        const float clampedX = std::clamp(imageX, 0.f, static_cast<float>(getWidth()));
+        const float clampedY = std::clamp(imageY, 0.f, static_cast<float>(getHeight()));
+
+        const float cellsWide = static_cast<float>(mMaxX - mMinX + 1);
+        const float cellsHigh = static_cast<float>(mMaxY - mMinY + 1);
+
+        const float cellCoordX = (clampedX / static_cast<float>(getWidth())) * cellsWide + static_cast<float>(mMinX);
+        const float cellCoordY
+            = (1.f - clampedY / static_cast<float>(getHeight())) * cellsHigh + static_cast<float>(mMinY);
+
+        worldX = cellCoordX * static_cast<float>(Constants::CellSizeInUnits);
+        worldY = cellCoordY * static_cast<float>(Constants::CellSizeInUnits);
     }
 
     void GlobalMap::requestOverlayTextureUpdate(int x, int y, int width, int height,

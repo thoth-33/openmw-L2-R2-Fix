@@ -38,7 +38,7 @@ TrueType fonts
 --------------
 
 Unlike vanilla Morrowind, OpenMW directly supports TrueType (``.ttf``) fonts. This is the recommended fonts format.
-OpenMW has build-in TrueType fonts: MysticCards, DemonicLetters and DejaVuLGCSansMono, which are used by default.
+OpenMW ships with TrueType fonts: MontserratMedium, MontserratSemiBold, MysticCards, and DemonicLetters.
 TrueType fonts are configured via ``openmw.cfg`` too:
 
 .. code-block:: openmwcfg

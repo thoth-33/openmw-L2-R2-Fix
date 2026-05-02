@@ -890,7 +890,10 @@ void OMW::Engine::prepareEngine()
     {
         std::string_view logo = Fallback::Map::getString("Movies_Company_Logo");
         if (!logo.empty())
-            mWindowManager->playVideo(logo, true);
+        {
+            const bool allowSkipping = !Settings::gui().mUnskippableIntroVideos;
+            mWindowManager->playVideo(logo, allowSkipping);
+        }
     }
 
     listener->loadingOn();
@@ -933,6 +936,9 @@ void OMW::Engine::prepareEngine()
 void OMW::Engine::go()
 {
     assert(!mContentFiles.empty());
+
+    // Force controller menus on while the game is running.
+    Settings::gui().mControllerMenus.set(true);
 
     Log(Debug::Info) << "OSG version: " << osgGetVersion();
     SDL_version sdlVersion;
@@ -1011,7 +1017,10 @@ void OMW::Engine::go()
 
         std::string_view logo = Fallback::Map::getString("Movies_Morrowind_Logo");
         if (!logo.empty())
-            mWindowManager->playVideo(logo, /*allowSkipping*/ true, /*overrideSounds*/ false);
+        {
+            const bool allowSkipping = !Settings::gui().mUnskippableIntroVideos;
+            mWindowManager->playVideo(logo, allowSkipping, /*overrideSounds*/ false);
+        }
     }
     else
     {
@@ -1070,6 +1079,7 @@ void OMW::Engine::go()
 
     mLuaWorker->join();
 
+    Settings::gui().mControllerMenus.set(false);
     // Save user settings
     Settings::Manager::saveUser(mCfgMgr.getUserConfigPath() / "settings.cfg");
     Settings::ShaderManager::get().save();

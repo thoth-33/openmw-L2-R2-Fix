@@ -25,6 +25,8 @@ namespace MWGui
 
         bool exit() override { return false; }
 
+        MyGUI::Widget* getControllerFocusTooltipWidget() const;
+
         // Events
         typedef MyGUI::delegates::MultiDelegate<> EventHandle_Void;
 
@@ -40,6 +42,7 @@ namespace MWGui
 
     protected:
         void onSelectBirth(MyGUI::ListBox* sender, size_t index);
+        void onListScroll(MyGUI::ListBox* sender, size_t position);
 
         void onAccept(MyGUI::ListBox* sender, size_t index);
         void onOkClicked(MyGUI::Widget* sender);
@@ -55,6 +58,7 @@ namespace MWGui
         std::vector<MyGUI::Widget*> mSpellItems;
         MyGUI::Button* mBackButton;
         MyGUI::Button* mOkButton;
+        MyGUI::Widget* mControllerHighlight = nullptr;
 
         ESM::RefId mCurrentBirthId;
 

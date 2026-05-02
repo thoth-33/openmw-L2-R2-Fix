@@ -1530,5 +1530,177 @@ Logs and settings changed through the launcher and in-game will be saved here.</
         <source>Active Config Directories</source>
         <translation>Активни конфигурационни директории</translation>
     </message>
+    <message>
+        <source>Use classic water shader files and textures when available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Classic Water Shader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scales the dialogue window independently of the main GUI scaling.&lt;/p&gt;&lt;p&gt;Set to 0.0 to follow GUI Scaling Factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dialogue Interface Scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply recommended interface and dialogue scaling based on resolution.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Recommended Scaling Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX Styled Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move HUD minimap and active effects to the top-left in an Xbox-style layout.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX Styled Minimap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Montserrat fonts for Xbox-style UI. Disable to use MysticCards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX Styled Fonts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use original Xbox tab order: Inventory, Magic, Map, Stats.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX Tab Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Prevent skipping intro videos before the main menu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Unskippable Intro Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hides LUA-based HUD elements when GUIs are open.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable LUA Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controller</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, only the focused container or trade window is visible.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Singular Window in the Container/Trade UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Highlight the current controller selection in menus.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Highlighted Selections with Controller Interfaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When using controller menus, use the left stick to navigate like the D-Pad instead of enabling the mouse.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Left Stick for D-Pad Navigation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the software cursor (drawn by the UI) instead of the hardware cursor when using the controller.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable Software Mouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speed multiplier for the gamepad cursor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamepad Cursor Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose which controller button icons to show.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controller Icon Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Steam</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Xbox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PlayStation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nintendo Switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GameCube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use white/black shoulder icons for LB/RB/L1/R1/L/R prompts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable white/black button icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace alchemy with an Xbox-style split menu flow.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX Alchemy UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Scales the settings menu, main menu, and save/load interface independently of the main GUI scaling.&lt;/p&gt;&lt;p&gt;Set to 0.0 to follow GUI Scaling Factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings &amp; Save/Load Interface Scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XBOX</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <vector>
 
 #include <SDL_events.h>
 
@@ -173,6 +174,23 @@ namespace MWBase
             = 0;
 
         virtual std::string formatResourceUsageStats() const = 0;
+
+        struct CustomSkillForStatsWindow
+        {
+            std::string mId;
+            std::string mName;
+            std::string mDescription;
+            std::string mIconPath;
+            std::string mAttributeId;
+            std::string mSubsection;
+            int mBase = 0;
+            int mModified = 0;
+            float mProgress = 0.f; // [0..1]
+            int mMaxLevel = 100; // < 0 means no max
+            bool mVisible = true;
+        };
+
+        virtual std::vector<CustomSkillForStatsWindow> getCustomSkillsForStatsWindow() const = 0;
     };
 
 }

@@ -5,10 +5,7 @@ PATH=$PATH:~/luarocks/bin
 
 pushd .
 echo "Install Teal Cyan"
-git clone https://github.com/teal-language/cyan.git
-cd cyan
-git checkout v0.4.1
-luarocks make cyan-0.4.1-1.rockspec
+luarocks install cyan 0.4.1-1
 popd
 
 cyan version

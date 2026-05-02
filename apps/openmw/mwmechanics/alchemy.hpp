@@ -118,6 +118,12 @@ namespace MWMechanics
         /// \return Slot index or -1, if adding failed because of no free slot or the ingredient type being
         /// listed already.
 
+        int setIngredient(size_t index, const MWWorld::Ptr& ingredient);
+        ///< Set ingredient for a specific slot.
+        ///
+        /// Replaces the slot contents while preserving ingredient order for the other slots.
+        /// \return Slot index or -1 if the slot is invalid or the ingredient already exists in another slot.
+
         void addApparatus(const MWWorld::Ptr& apparatus);
         ///< Add apparatus into the appropriate slot.
 

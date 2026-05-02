@@ -29,6 +29,11 @@ namespace SDLUtil
     class InputWrapper;
 }
 
+namespace MyGUI
+{
+    class ImageBox;
+}
+
 struct SDL_Window;
 
 namespace MWInput
@@ -120,6 +125,8 @@ namespace MWInput
         std::unique_ptr<ControllerManager> mControllerManager;
         std::unique_ptr<SensorManager> mSensorManager;
         std::unique_ptr<GyroManager> mGyroManager;
+
+        MyGUI::ImageBox* mWaylandSoftwareCursor = nullptr;
     };
 }
 #endif

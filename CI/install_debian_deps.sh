@@ -128,9 +128,7 @@ export DEBIAN_FRONTEND=noninteractive
 set -x
 mkdir -pv "$APT_CACHE_DIR"
 
-while true; do
-  apt-get update -yqq && break
-done
+bash "$(dirname "$0")/apt_update_retry.sh"
 
 apt-get -qq -o dir::cache::archives="$APT_CACHE_DIR" install -y --no-install-recommends software-properties-common gnupg >/dev/null
 

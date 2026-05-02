@@ -3,6 +3,7 @@
 
 #include <sol/table.hpp>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -15,6 +16,7 @@ namespace LuaUi
     void clearGameInterface();
     void clearMenuInterface();
 
+    bool isAnyElementVisibleOnLayer(std::string_view layerName);
     bool warnUnused(std::vector<std::string>& warnings, sol::object table, const std::string& tableName,
         const std::vector<std::string_view>& usedKeys, bool generateWarningStrings);
 }

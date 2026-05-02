@@ -42,6 +42,7 @@ namespace MWRender
         int getHeight() const { return mHeight; }
 
         void worldPosToImageSpace(float x, float z, float& imageX, float& imageY);
+        void imageSpaceToWorldPos(float imageX, float imageY, float& worldX, float& worldY);
 
         void exploreCell(int cellX, int cellY, osg::ref_ptr<osg::Texture2D> localMapTexture);
 

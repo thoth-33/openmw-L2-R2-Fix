@@ -1,0 +1,28 @@
+ConfigTitle: Skill Framework
+ConfigSummary: |-
+  Custom Skills for OpenMW
+  --- v%{version} ---
+
+ConfigCategoryClientOptions: Client Options
+ConfigShowSubsections: Show subsections
+ConfigShowSubsectionsDesc: |-
+  Toggle the display of subsections in the stats window.
+  Requires a Lua reload to take effect.
+
+ConfigCategoryGlobalOptions: Global Options
+ConfigSkillsProgressAttributes: Skills progress attributes
+ConfigSkillsProgressAttributesDesc: |-
+  Custom skills progress their governing attributes when leveled up.
+  Will likely not work with most leveling overhaul mods.
+
+StatsWindow_OtherSkillsHeader: Other Skills
+StatsWindow_Sub_Misc: Misc.
+StatsWindow_Sub_Arts: Arts
+StatsWindow_Sub_Combat: Combat
+StatsWindow_Sub_Crafts: Crafts
+StatsWindow_Sub_Language: Language
+StatsWindow_Sub_Magic: Magic
+StatsWindow_Sub_Movement: Movement
+StatsWindow_Sub_Nature: Nature
+StatsWindow_Sub_Social: Social
+StatsWindow_Sub_Theology: Theology

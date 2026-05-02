@@ -22,6 +22,7 @@ namespace LuaUi
         , mForceSize(false)
         , mPropagateEvents(true)
         , mVisible(true)
+        , mGlobalVisible(true)
         , mLua(nullptr)
         , mWidget(nullptr)
         , mSlot(this)
@@ -106,8 +107,16 @@ namespace LuaUi
         // workaround for MyGUI bug
         // parent visibility doesn't affect added children
         MyGUI::Widget* parent = widget()->getParent();
-        bool inheritedVisible = mVisible && (parent == nullptr || parent->getInheritedVisible());
+        bool inheritedVisible = mVisible && mGlobalVisible && (parent == nullptr || parent->getInheritedVisible());
         widget()->setVisible(inheritedVisible);
+    }
+
+    void WidgetExtension::setGlobalVisible(bool visible)
+    {
+        if (mGlobalVisible == visible)
+            return;
+        mGlobalVisible = visible;
+        updateCoord();
     }
 
     void WidgetExtension::attach(WidgetExtension* ext)

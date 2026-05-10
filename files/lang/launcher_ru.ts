@@ -1702,5 +1702,13 @@ Logs and settings changed through the launcher and in-game will be saved here.</
         <source>XBOX</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Size of text in journal, books, and scrolls.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

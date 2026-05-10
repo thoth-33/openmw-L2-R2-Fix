@@ -152,7 +152,7 @@ namespace MWGui
     {
         // For small font size split alphabet to two columns (2x15 characers), for big font size split it to three
         // colums (3x10 characters).
-        return Settings::gui().mFontSize < 18 ? 2 : 3;
+        return Settings::gui().mJournalFontSize < 18 ? 2 : 3;
     }
 
     JournalBooks::JournalBooks(std::shared_ptr<JournalViewModel> model, ToUTF8::FromType encoding)

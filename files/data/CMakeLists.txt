@@ -134,9 +134,6 @@ set(BUILTIN_DATA_FILES
     l10n/OMWShaders/fr.yaml
     l10n/OMWShaders/pl.yaml
 
-    # L10n for Skill Framework
-    l10n/SkillFramework/en.yaml
-
     openmw_aux/util.lua
     openmw_aux/time.lua
     openmw_aux/calendar.lua
@@ -176,6 +173,7 @@ set(BUILTIN_DATA_FILES
     scripts/omw/mwui/space.lua
     scripts/omw/mwui/init.lua
     scripts/omw/skillhandlers.lua
+    scripts/omw/skillframework_stats_bridge.lua
     scripts/omw/crimes.lua
     scripts/omw/ui.lua
     scripts/omw/usehandlers.lua
@@ -186,23 +184,6 @@ set(BUILTIN_DATA_FILES
     scripts/omw/input/smoothmovement.lua
     scripts/omw/input/gamepadcontrols.lua
 
-    # Skill Framework (custom skills)
-    scripts/SkillFramework/actor.lua
-    scripts/SkillFramework/api.lua
-    scripts/SkillFramework/global.lua
-    scripts/SkillFramework/types.lua
-    scripts/SkillFramework/config/global.lua
-    scripts/SkillFramework/config/player.lua
-    scripts/SkillFramework/settings/global.lua
-    scripts/SkillFramework/settings/player.lua
-    scripts/SkillFramework/util/helpers.lua
-
-    icons/SkillFramework/combat_blank.dds
-    icons/SkillFramework/default.dds
-    icons/SkillFramework/default_blank.dds
-    icons/SkillFramework/magic_blank.dds
-    icons/SkillFramework/stealth_blank.dds
-    
     shaders/adjustments.omwfx
     shaders/bloomlinear.omwfx
     shaders/debug.omwfx

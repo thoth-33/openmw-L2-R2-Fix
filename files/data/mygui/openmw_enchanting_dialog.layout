@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <MyGUI type="Layout">
-    <Widget type="Window" skin="MW_Dialog" layer="Windows" position="0 0 482 305" align="Center" name="_Main">
+    <Widget type="Window" skin="MW_Dialog" layer="Windows" position="0 0 522 305" align="Center" name="_Main">
 
         <Widget type="HBox" position="11 9 209 29">
             <Property key="Spacing" value="8"/>
@@ -50,7 +50,7 @@
         </Widget>
 
         <!-- Values -->
-        <Widget type="VBox" position="304 7 161 116">
+        <Widget type="VBox" position="304 7 201 116">
             <!-- Price block moved here (was the Constant effect block) -->
             <Widget type="HBox" position="11 76 209 27">
                 <Property key="Spacing" value="8"/>
@@ -114,7 +114,7 @@
             <!-- Constant effect moved here (was the Price block) -->
             <Widget type="HBox">
                 <UserString key="HStretch" value="true"/>
-                <Widget type="Button" skin="MW_Button" name="TypeButton" position="0 0 161 22">
+                <Widget type="Button" skin="MW_Button" name="TypeButton" position="0 0 201 22">
                     <Property key="Caption" value="Constant effect"/>
                 </Widget>
             </Widget>
@@ -149,8 +149,8 @@
             <UserString key="ToolTipLayout" value="TextToolTip"/>
             <UserString key="Caption_Text" value="#{sEnchantmentHelp10}"/>
         </Widget>
-        <Widget type="Widget" skin="MW_Box" position="215 130 251 154">
-            <Widget type="ScrollView" skin="MW_ScrollView" position="3 3 243 146" name="UsedEffects">
+        <Widget type="Widget" skin="MW_Box" position="215 130 291 154">
+            <Widget type="ScrollView" skin="MW_ScrollView" position="3 3 283 146" name="UsedEffects">
                 <Property key="CanvasAlign" value="Left Top"/>
             </Widget>
         </Widget>

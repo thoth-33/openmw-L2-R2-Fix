@@ -19,7 +19,7 @@
                 <Property key="TextAlign" value="Left"/>
             </Widget>
 
-            <Widget type="NumericEditBox" skin="MW_TextEdit" position="343 8 60 30" name="BrewCount">
+            <Widget type="NumericEditBox" skin="MW_TextEdit" position="363 8 60 30" name="BrewCount">
                 <Property key="TextAlign" value="Center"/>
                 <Property key="Visible" value="true"/>
                 <Property key="Enabled" value="true"/>

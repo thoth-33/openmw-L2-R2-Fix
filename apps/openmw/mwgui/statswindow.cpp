@@ -12,6 +12,7 @@
 #include <MyGUI_Window.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <limits>
 
@@ -275,11 +276,15 @@ namespace MWGui
 
     void StatsWindow::onMouseWheel(MyGUI::Widget* /*sender*/, int rel)
     {
-        if (mSkillView->getViewOffset().top + rel * 0.3 > 0)
-            mSkillView->setViewOffset(MyGUI::IntPoint(0, 0));
-        else
-            mSkillView->setViewOffset(
-                MyGUI::IntPoint(0, static_cast<int>(mSkillView->getViewOffset().top + rel * 0.3)));
+        if (mSkillView->getCanvasSize().height <= mSkillView->getHeight())
+            return;
+
+        const float scaledStep = rel * 0.3f;
+        const int scrollDelta = scaledStep > 0.f ? std::max(1, static_cast<int>(std::floor(scaledStep)))
+                                                 : std::min(-1, static_cast<int>(std::ceil(scaledStep)));
+        const int minOffset = std::min(0, mSkillView->getHeight() - mSkillView->getCanvasSize().height);
+        const int newOffset = std::clamp(mSkillView->getViewOffset().top + scrollDelta, minOffset, 0);
+        mSkillView->setViewOffset(MyGUI::IntPoint(0, newOffset));
     }
 
     void StatsWindow::onWindowResize(MyGUI::Window* window)
@@ -1719,16 +1724,19 @@ namespace MWGui
         const MyGUI::IntCoord viewCoord = mSkillView->getAbsoluteCoord();
         const MyGUI::IntCoord headerCoord = headerWidget ? headerWidget->getAbsoluteCoord() : itemCoord;
 
+        const bool itemAboveView = itemCoord.top < viewCoord.top;
+        const bool itemBelowView = itemCoord.top + itemCoord.height > viewCoord.top + viewCoord.height;
+
         int newOffset = mSkillView->getViewOffset().top;
-        if (headerWidget != nullptr && headerCoord.top < viewCoord.top)
+        if (itemAboveView && headerWidget != nullptr && headerCoord.top < viewCoord.top)
         {
             newOffset += viewCoord.top - headerCoord.top;
         }
-        else if (itemCoord.top < viewCoord.top)
+        else if (itemAboveView)
         {
             newOffset += viewCoord.top - itemCoord.top;
         }
-        else if (itemCoord.top + itemCoord.height > viewCoord.top + viewCoord.height)
+        else if (itemBelowView)
         {
             newOffset -= (itemCoord.top + itemCoord.height) - (viewCoord.top + viewCoord.height);
         }

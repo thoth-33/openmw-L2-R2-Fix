@@ -1709,5 +1709,13 @@ Logi i ustawienia zmienione za pomocą programu uruchamiającego i w grze zostan
         <source>XBOX</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Size of text in journal, books, and scrolls.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

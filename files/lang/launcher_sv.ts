@@ -1706,5 +1706,13 @@ Loggar och inställningar som ändras genom startaren och inne i spelet kommer s
         <source>XBOX</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Size of text in journal, books, and scrolls.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

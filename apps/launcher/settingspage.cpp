@@ -553,6 +553,7 @@ bool Launcher::SettingsPage::loadSettings()
             : (Settings::gui().mSettingsWindowIgnoreScaling ? 1.0 : interfaceScaling);
         setScalingValues(interfaceScaling, effectiveDialogueScaling, effectiveSettingsScaling);
         fontSizeSpinBox->setValue(Settings::gui().mFontSize);
+        journalFontSizeSpinBox->setValue(Settings::gui().mJournalFontSize);
         loadSettingFloat(Settings::input().mGamepadCursorSpeed, *gamepadCursorSpeedSpinBox);
         loadSettingBool(Settings::input().mEnableSoftwareMouse, *enableSoftwareMouseCheckBox);
         controllerIconStyleComboBox->setCurrentIndex(
@@ -918,6 +919,7 @@ void Launcher::SettingsPage::saveSettings()
         Settings::gui().mDialogueInterfaceScaling.set(dialogueScalingSpinBox->value());
         Settings::gui().mSettingsInterfaceScaling.set(settingsInterfaceScalingSpinBox->value());
         Settings::gui().mFontSize.set(fontSizeSpinBox->value());
+        Settings::gui().mJournalFontSize.set(journalFontSizeSpinBox->value());
         saveSettingFloat(*gamepadCursorSpeedSpinBox, Settings::input().mGamepadCursorSpeed);
         saveSettingBool(*enableSoftwareMouseCheckBox, Settings::input().mEnableSoftwareMouse);
         Settings::input().mControllerIconStyle.set(

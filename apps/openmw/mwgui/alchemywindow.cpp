@@ -1223,11 +1223,6 @@ namespace MWGui
                     setXboxIngredientFocus(mXboxFocusedIngredient);
                     setControllerFocusWidget(mIngredients[mXboxFocusedIngredient]);
                 }
-                else if (focus != mBrewCountEdit)
-                {
-                    setXboxIngredientFocus(mXboxFocusedIngredient + 1);
-                    setControllerFocusWidget(mIngredients[mXboxFocusedIngredient]);
-                }
                 return true;
             }
 

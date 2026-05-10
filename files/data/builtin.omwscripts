@@ -6,11 +6,8 @@ MENU: scripts/omw/settings/menu.lua
 PLAYER: scripts/omw/settings/player.lua
 GLOBAL: scripts/omw/settings/global.lua
 
-# Skill Framework (custom skills)
-MENU: scripts/SkillFramework/settings/player.lua
-GLOBAL: scripts/SkillFramework/settings/global.lua
-PLAYER, NPC: scripts/SkillFramework/actor.lua
-GLOBAL: scripts/SkillFramework/global.lua
+# Skill Framework bridge (for external Skill Framework mod)
+PLAYER: scripts/omw/skillframework_stats_bridge.lua
 
 # Mechanics
 GLOBAL: scripts/omw/activationhandlers.lua

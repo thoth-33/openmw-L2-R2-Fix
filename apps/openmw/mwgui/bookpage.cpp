@@ -15,12 +15,17 @@
 
 namespace
 {
+    int getJournalUiFontHeight()
+    {
+        return std::max(1, Settings::gui().mJournalFontSize.get());
+    }
+
     std::optional<MyGUI::GlyphInfo> getGlyphInfo(MyGUI::IFont* font, MyGUI::Char ch)
     {
         const MyGUI::GlyphInfo* gi = font->getGlyphInfo(ch);
         if (!gi)
             return {};
-        const float scale = font->getDefaultHeight() / static_cast<float>(Settings::gui().mFontSize);
+        const float scale = font->getDefaultHeight() / static_cast<float>(getJournalUiFontHeight());
         MyGUI::GlyphInfo info = *gi;
         info.bearingX /= scale;
         info.bearingY /= scale;
@@ -632,7 +637,7 @@ namespace MWGui
             if (mPartialWhitespace.empty() && mPartialWord.empty())
                 return;
 
-            const int fontHeight = Settings::gui().mFontSize;
+            const int fontHeight = getJournalUiFontHeight();
             int spaceWidth = 0;
             int wordWidth = 0;
 
